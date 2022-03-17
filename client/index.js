@@ -32,31 +32,23 @@ class Main extends Component {
     }
   }
   render() {
-    if (this.state.selectedContact.id)
-      return (
-        <div id="main">
-          <div id="navbar">
-            <div>Contact List</div>
-          </div>
-          <div id="container">
-            <SingleContact selectedContact={this.state.selectedContact} />
-          </div>
+    return (
+      <div id="main">
+        <div id="navbar">
+          <div>Contact List</div>
         </div>
-      );
-    else
-      return (
-        <div id="main">
-          <div id="navbar">
-            <div>Contact List</div>
-          </div>
-          <div id="container">
+        <div id="container">
+          {this.state.selectedContact.id ? (
+            <SingleContact selectedContact={this.state.selectedContact} />
+          ) : (
             <ContactList
               selectContact={this.selectContact}
               contacts={this.state.contacts}
             />
-          </div>
+          )}
         </div>
-      );
+      </div>
+    );
   }
 }
 

@@ -1,6 +1,5 @@
 import React from 'react'
-
-import ContactRow from './contactRow'; 
+import ContactRow from './contactRow';
 
 const ContactList = (props) => {
  return (
@@ -13,7 +12,7 @@ const ContactList = (props) => {
     </tr>
     {props.contacts&&
       props.contacts.map((contact) => {
-        return <ContactRow key={contact.id} contact={contact}/>
+        return <ContactRow key={contact.id} contact={contact} selectContact={props.selectContact}/>
       })
     }
   </tbody>

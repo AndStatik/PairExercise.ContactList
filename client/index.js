@@ -1,31 +1,62 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import ContactList from './contactList';
-
-const contacts = [
-  { id: 1, name: 'R2-D2', phone: '222-222-2222', email: 'r2d2@droids.com' },
-  { id: 2, name: 'C-3PO', phone: '333-333-3333', email: 'c3po@droids.com' },
-  { id: 3, name: 'BB-8', phone: '888-888-8888', email: 'bb8@droids.com' },
-];
+import SingleContact from './SingleContact';
 
 class Main extends Component {
   constructor() {
     super();
     this.state = {
-      contacts: contacts,
+      contacts: [],
+      selectedContact: {},
     };
+    this.selectContact = this.selectContact.bind(this);
+  }
+  async componentDidMount() {
+    try {
+      const response = await axios.get('/api/contacts');
+      const contacts = response.data;
+      this.setState({ contacts });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async selectContact(contactId) {
+    try {
+      const contInfo = await axios.get(`/api/contacts/${contactId}`);
+      const selectedContact = contInfo.data;
+      this.setState({ selectedContact });
+    } catch (error) {
+      console.log(error);
+    }
   }
   render() {
-    return (
-      <div id="main">
-        <div id="navbar">
-          <div>Contact List</div>
+    if (this.state.selectedContact.id)
+      return (
+        <div id="main">
+          <div id="navbar">
+            <div>Contact List</div>
+          </div>
+          <div id="container">
+            <SingleContact selectedContact={this.state.selectedContact} />
+          </div>
         </div>
-        <div id="container">
-           <ContactList contacts={this.state.contacts}/>
+      );
+    else
+      return (
+        <div id="main">
+          <div id="navbar">
+            <div>Contact List</div>
+          </div>
+          <div id="container">
+            <ContactList
+              selectContact={this.selectContact}
+              contacts={this.state.contacts}
+            />
+          </div>
         </div>
-      </div>
-    );
+      );
   }
 }
 
